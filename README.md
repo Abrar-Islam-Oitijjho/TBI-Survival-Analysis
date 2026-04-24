@@ -1,5 +1,5 @@
-# TBI-Survival-Analysis
-Landmark-based survival analysis for predicting time to severe RAP deterioration in TBI patients using early physiological signals. Implements Kaplan-Meier, Cox Proportional Hazards, and Random Survival Forest models to compare interpretable and ML-based time-to-event prediction.
+# Privacy-Aware TBI Survival Analysis
+Landmark-based survival analysis for predicting time to severe RAP deterioration in TBI patients using early physiological signals. Implements Kaplan-Meier, Cox Proportional Hazards, and Random Survival Forest models to compare interpretable and ML-based time-to-event prediction. This project extends the original survival-analysis workflow with a privacy-aware preprocessing layer that de-identifies patient-level data before modeling.
 
 ## Overview
 
@@ -15,6 +15,21 @@ For each landmark, only patients who remained event-free up to the landmark time
 ## Clinical Question
 
 **From the first few hours of monitoring, can we predict how soon a patient will experience severe compensatory reserve deterioration?**
+
+## Privacy-Aware Preprocessing
+
+Before survival modeling, the pipeline applies de-identification and privacy-preserving transformations:
+
+| Original field | Privacy-aware transformation |
+|---|---|
+| `ID` | Hashed into `anon_patient_id` and then removed |
+| `name` | Removed if present |
+| `age` | Converted into age groups such as `50-59`, `60-69`, `70+` |
+| `Sex (M/F)` | Standardized into `sex_group` |
+| `DateTime` | Converted into `time_minutes` from monitoring start, then removed |
+| File-based patient identity | Replaced with anonymized patient identifier |
+
+This preserves the temporal structure needed for survival analysis while removing direct identifiers and reducing re-identification risk from exact timestamps and exact age.
 
 ## Event Definition
 
